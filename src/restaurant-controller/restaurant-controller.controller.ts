@@ -1,6 +1,8 @@
-import { Controller, Get, Param, Post } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Param, ParseIntPipe, Post, UsePipes } from '@nestjs/common';
 import { RestaurantServiceService } from 'src/restaurant-service/restaurant-service.service';
 import { Restaurant } from 'src/types';
+import { RestourantSchema } from './pipes/restaurant.schema';
+import { JoiValidationPipe } from './pipes/restaurant.validate';
 
 @Controller('api/v1/restaurant-controller')
 export class RestaurantControllerController {
@@ -13,6 +15,7 @@ export class RestaurantControllerController {
 
 
     @Post()
+    // @UsePipes(new JoiValidationPipe(RestourantSchema))
     saveNewRestaurant(restaurant: Restaurant) : Restaurant {
         return this.restaurantService.createRestaurant(restaurant);
     }
@@ -23,7 +26,7 @@ export class RestaurantControllerController {
     }
 
     @Get("/:id")
-    getRestaurant(@Param('id') id: Number) : Restaurant[]{
+    getRestaurant(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE})) id: Number) : Restaurant[]{
         return this.restaurantService.getRestaurantById(id);
     }
 }
