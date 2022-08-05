@@ -1,6 +1,6 @@
 import { Controller, Get, HttpStatus, Param, ParseIntPipe, Post, UsePipes } from '@nestjs/common';
-import { RestaurantServiceService } from 'src/restaurant-service/restaurant-service.service';
 import { Restaurant } from 'src/types';
+import { RestaurantServiceService } from '../restaurant-service/restaurant-service.service';
 import { RestourantSchema } from './pipes/restaurant.schema';
 import { JoiValidationPipe } from './pipes/restaurant.validate';
 

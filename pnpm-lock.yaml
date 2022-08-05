@@ -6,7 +6,7 @@ specifiers:
   '@nestjs/core': ^9.0.0
   '@nestjs/platform-express': ^9.0.0
   '@nestjs/schematics': ^9.0.0
-  '@nestjs/testing': ^9.0.0
+  '@nestjs/testing': ^9.0.8
   '@types/express': ^4.17.13
   '@types/jest': 28.1.4
   '@types/joi': ^17.2.3
