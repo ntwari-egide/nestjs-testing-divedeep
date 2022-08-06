@@ -1,22 +1,39 @@
+import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { RestaurantServiceService } from './restaurant-service/restaurant-service.service';
+import * as request from 'supertest';
 
 describe('AppController', () => {
-  let appController: AppController;
+  let appController: INestApplication;
+  let restaurantService = { getAll: () => ['test']}
 
-  beforeEach(async () => {
-    const app: TestingModule = await Test.createTestingModule({
-      controllers: [AppController],
-      providers: [AppService],
-    }).compile();
+  beforeAll(async () => {
+    const moduleRef = await Test.createTestingModule({
+      imports: []
+    })
+    .overrideProvider(RestaurantServiceService)
+    .useValue(restaurantService)
+    .compile()
 
-    appController = app.get<AppController>(AppController);
-  });
+    appController = moduleRef.createNestApplication();
+    await appController.init()
+  })
+
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+    it('/GET all restaurants"', () => {
+      return request(appController.getHttpServer())
+        .get('/api/v1/restaurant-controller')
+        .expect(200)
+        .expect({
+          data: restaurantService.getAll()
+        })
     });
   });
+
+  afterAll( async () => {
+    await appController.close()
+  })
 });
